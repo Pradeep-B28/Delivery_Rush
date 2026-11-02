@@ -18,6 +18,8 @@ import { renderCodeView, attachCodeViewEvents } from "../ui/codeview.js";
 import { renderCtaCard } from "../ui/cta.js";
 
 let activeCleanup = null;
+let activeCycleTimer = null;
+let activeKeyHandler = null;
 
 const homeMap = new Map(CITY.homes.map((h) => [h.id, h]));
 const shopMap = new Map(CITY.shops.map((s) => [s.id, s]));
@@ -26,9 +28,15 @@ const riderMap = new Map(CITY.riders.map((r) => [r.id, r]));
 export function mount(container, routeInfo = {}) {
   unmount();
 
+  const isDemo = routeInfo.query && routeInfo.query.demo === "1";
+  const isPresent = routeInfo.query && routeInfo.query.present === "1";
+  const hideWhatsApp = isDemo || isPresent;
+
   const runData = hasLastRun() ? getLastRun() : null;
-  const shiftId = (routeInfo.params && routeInfo.params.id) || (runData && runData.shift.id) || "lunch";
+  const shiftId = (routeInfo.params && routeInfo.params.id) || (runData && runData.shift.id) || (isPresent ? "dinner" : "lunch");
   const shift = getShift(shiftId) || SHIFTS[0];
+
+  const logoHtml = isDemo ? `<img src="assets/logo.png" alt="Wrench Wise" class="demo-logo" height="20">` : "";
 
   // Run algorithm to get decisions
   const algoRun = (runData && runData.shift.id === shift.id && runData.algoRun)
@@ -115,9 +123,12 @@ export function mount(container, routeInfo = {}) {
       <div class="think-viewport">
         <!-- 1. Decision Nav -->
         <header class="think-nav-bar">
-          <button type="button" class="think-nav-btn" id="btnDecBack" ${currentDecisionIdx <= 0 ? "disabled" : ""}>
-            &larr; ${t("think.back")}
-          </button>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            ${logoHtml}
+            <button type="button" class="think-nav-btn" id="btnDecBack" ${currentDecisionIdx <= 0 ? "disabled" : ""}>
+              &larr; ${t("think.back")}
+            </button>
+          </div>
           <span class="think-decision-heading">
             ${t("think.decision", { n: currentDecisionIdx + 1, total: totalDecisions, dish: order.dish || decision.order, customer: home.name })}
           </span>
@@ -174,7 +185,7 @@ export function mount(container, routeInfo = {}) {
           </div>
 
           <!-- CTA Card -->
-          ${renderCtaCard({ shift, you: runData?.you, algo: algoScore, from: "think" })}
+          ${renderCtaCard({ shift, you: runData?.you, algo: algoScore, from: "think", hideWhatsApp })}
         </section>
       </div>
     `;
@@ -247,6 +258,41 @@ export function mount(container, routeInfo = {}) {
     }
   }
 
+  // Presenter mode keyboard navigation
+  if (isPresent) {
+    container.classList.add("is-presenter");
+    activeKeyHandler = (e) => {
+      if (e.key === "ArrowLeft" && currentDecisionIdx > 0) {
+        currentDecisionIdx--;
+        render();
+      } else if (e.key === "ArrowRight" && currentDecisionIdx < totalDecisions - 1) {
+        currentDecisionIdx++;
+        render();
+      } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        const conceptIds = CONCEPTS.map((c) => c.id);
+        const curIdx = conceptIds.indexOf(activeConceptId);
+        const nextIdx = e.key === "ArrowDown"
+          ? (curIdx + 1) % conceptIds.length
+          : (curIdx - 1 + conceptIds.length) % conceptIds.length;
+        activeConceptId = conceptIds[nextIdx];
+        render();
+      }
+    };
+    document.addEventListener("keydown", activeKeyHandler);
+  }
+
+  // Demo mode part=all tab cycling
+  if (isDemo && routeInfo.query && routeInfo.query.part === "all") {
+    const tabKeys = ["pq", "bfs", "greedy", "queue"];
+    let tabCycleIdx = tabKeys.indexOf(activeConceptId);
+    if (tabCycleIdx === -1) tabCycleIdx = 0;
+    activeCycleTimer = setInterval(() => {
+      tabCycleIdx = (tabCycleIdx + 1) % tabKeys.length;
+      activeConceptId = tabKeys[tabCycleIdx];
+      render();
+    }, 5000);
+  }
+
   render();
 }
 
@@ -254,5 +300,13 @@ export function unmount() {
   if (activeCleanup) {
     activeCleanup();
     activeCleanup = null;
+  }
+  if (activeCycleTimer) {
+    clearInterval(activeCycleTimer);
+    activeCycleTimer = null;
+  }
+  if (activeKeyHandler) {
+    document.removeEventListener("keydown", activeKeyHandler);
+    activeKeyHandler = null;
   }
 }

@@ -26,6 +26,8 @@ export function mount(container, params = {}) {
   const runData = getLastRun();
   const { shift, you, algoRun, algo, verdict, yourRun, gaps } = runData;
   const isDemo = params.query && params.query.demo === "1";
+  const demoSpeed = isDemo && params.query.speed === "2" ? 2 : 1;
+  const demoPart = (params.query && params.query.part) || "all";
   const youLabel = isDemo ? t("demo.you") : t("race.you");
 
   const shiftOrder = ["lunch", "dinner", "rain"];
@@ -33,13 +35,18 @@ export function mount(container, params = {}) {
   const nextShiftId = shiftOrder[(curIdx + 1) % shiftOrder.length];
   const nextShift = SHIFTS.find((s) => s.id === nextShiftId) || SHIFTS[0];
 
+  const logoHtml = isDemo ? `<img src="assets/logo.png" alt="Wrench Wise" class="demo-logo" height="20">` : "";
+
   container.innerHTML = `
     <div class="result-viewport" data-mood="${shift.mood}">
       <header class="race-topbar" id="raceTopbar">
-        <span class="race-shift-title">${shift.name}</span>
+        <div class="race-topbar-left" style="display:flex; align-items:center;">
+          ${logoHtml}
+          <span class="race-shift-title">${shift.name}</span>
+        </div>
         <div class="race-topbar-actions">
-          <button type="button" class="race-btn speed-btn is-active" id="btn-speed-1">1x</button>
-          <button type="button" class="race-btn speed-btn" id="btn-speed-2">2x</button>
+          <button type="button" class="race-btn speed-btn ${demoSpeed === 1 ? "is-active" : ""}" id="btn-speed-1">1x</button>
+          <button type="button" class="race-btn speed-btn ${demoSpeed === 2 ? "is-active" : ""}" id="btn-speed-2">2x</button>
           <button type="button" class="race-btn skip-btn" id="btn-skip">${t("race.skip")}</button>
         </div>
       </header>
@@ -108,7 +115,7 @@ export function mount(container, params = {}) {
         <a href="#/play/${nextShift.id}" class="result-btn" id="btn-next">${t("result.next", { shift: nextShift.name })}</a>
         <button type="button" class="result-btn" id="btn-challenge">${t("result.challenge")}</button>
       </div>
-      ${renderCtaCard({ shift, you, algo, from: "result" })}
+      ${renderCtaCard({ shift, you, algo, from: "result", hideWhatsApp: isDemo })}
     `;
 
     const challengeBtn = revealContainer.querySelector("#btn-challenge");
@@ -120,6 +127,12 @@ export function mount(container, params = {}) {
           avg: you.avg
         });
       });
+    }
+
+    if (isDemo && demoPart === "all") {
+      setTimeout(() => {
+        navigate(`#/think/${shift.id}?demo=1&part=all&speed=${demoSpeed}`);
+      }, 5000);
     }
   }
 
@@ -142,6 +155,10 @@ export function mount(container, params = {}) {
       doReveal();
     }
   });
+
+  if (demoSpeed === 2) {
+    race.setSpeed(2);
+  }
 
   btnSpeed1.addEventListener("click", () => {
     btnSpeed1.classList.add("is-active");

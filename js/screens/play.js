@@ -2,7 +2,7 @@
 // Uses content.js, game.js, motion.js, router.js, score.js, algo.js, copy.js, and ui/ components.
 // Used by router.js when URL matches #/play/:id.
 
-import { CITY, getShift, CONFIG } from "../content.js";
+import { CITY, getShift, CONFIG, LINES } from "../content.js";
 import { COPY, t } from "../copy.js";
 import { formatMins } from "../links.js";
 import { setBest } from "../store.js";
@@ -28,15 +28,33 @@ let activeKeyHandler = null;
 export function mount(container, params = {}) {
   unmount();
 
+  const isDemo = params.query && params.query.demo === "1";
+  const demoSpeed = isDemo && params.query.speed === "2" ? 2 : 1;
+  const demoPart = (params.query && params.query.part) || "all";
+
   const shift = getShift(params.id || "lunch") || getShift("lunch");
-  const game = createGame(CITY, shift, CONFIG);
+  const playConfig = isDemo
+    ? {
+        ...CONFIG,
+        game: {
+          ...CONFIG.game,
+          crawl: 1.0,
+          msPerMinute: CONFIG.game.msPerMinute / demoSpeed
+        }
+      }
+    : CONFIG;
+
+  const game = createGame(CITY, shift, playConfig);
   const sim = game.sim;
   document.body.classList.add("in-game");
+
+  const logoHtml = isDemo ? `<img src="assets/logo.png" alt="Wrench Wise" class="demo-logo" height="20">` : "";
 
   container.innerHTML = `
     <div class="play-viewport" data-mood="${shift.mood}">
       <header class="play-topbar">
         <div class="topbar-left">
+          ${logoHtml}
           <button type="button" class="topbar-btn leave-btn" id="btn-leave" aria-label="${t("play.leave.title")}">&larr; <span class="leave-label">${t("play.leave.yes")}</span></button>
           <span class="topbar-shift-title">${shift.name}</span>
         </div>
@@ -170,9 +188,9 @@ export function mount(container, params = {}) {
 
   let isCountingDown = false;
   let countdownTimer = null;
-  const coach = createCoach({ sim, statusRow, onComplete: () => statusRow.setMessage(t("play.tapOrder")) });
+  const coach = isDemo ? null : createCoach({ sim, statusRow, onComplete: () => statusRow.setMessage(t("play.tapOrder")) });
 
-  if (!coach.active) {
+  if (!isDemo && !coach.active) {
     isCountingDown = true;
     let count = 3;
     statusRow.setMessage(`${count}...`);
@@ -187,6 +205,10 @@ export function mount(container, params = {}) {
       }
     }, CONFIG.game.countdownMs / 3);
   }
+
+  const sampleActions = isDemo ? (LINES[shift.id]?.sample || []) : [];
+  const selectedDemoActions = new Set();
+  const executedDemoActions = new Set();
 
   btnPause.addEventListener("click", () => {
     if (game.isPaused) {
@@ -262,6 +284,34 @@ export function mount(container, params = {}) {
       selectedOrder: game.selected ? sim.byId.get(game.selected) : null
     });
 
+    if (isDemo && !game.isPaused) {
+      for (let i = 0; i < sampleActions.length; i++) {
+        const act = sampleActions[i];
+        if (sim.t >= act.at - 1 && !selectedDemoActions.has(i) && !executedDemoActions.has(i)) {
+          selectedDemoActions.add(i);
+          handleOrderSelect(act.order);
+          const card = orderCards.get(act.order);
+          if (card) {
+            const ring = document.createElement("div");
+            ring.className = "demo-tap-ring";
+            card.appendChild(ring);
+            setTimeout(() => { if (ring.parentNode) ring.remove(); }, 800);
+          }
+        }
+        if (sim.t >= act.at && !executedDemoActions.has(i)) {
+          executedDemoActions.add(i);
+          const chip = riderChips.get(act.rider);
+          if (chip) {
+            const ring = document.createElement("div");
+            ring.className = "demo-tap-ring";
+            chip.appendChild(ring);
+            setTimeout(() => { if (ring.parentNode) ring.remove(); }, 800);
+          }
+          handleRiderPick(act.rider);
+        }
+      }
+    }
+
     if (sim.t !== lastShiftMinute) {
       lastShiftMinute = sim.t;
       statMinute.textContent = `Min ${sim.t}`;
@@ -285,8 +335,12 @@ export function mount(container, params = {}) {
     const gaps = orderGaps(shift, you, algo);
 
     setLastRun({ shift, you, algoRun, algo, verdict, yourRun, gaps, actions: sim.actions });
-    setBest(shift.id, you.avg);
-    setTimeout(() => { navigate("#/result"); }, 600);
+    if (!isDemo) {
+      setBest(shift.id, you.avg);
+      setTimeout(() => { navigate("#/result"); }, 600);
+    } else {
+      setTimeout(() => { navigate(`#/result?demo=1&part=${demoPart}&speed=${demoSpeed}`); }, 600);
+    }
   }
 }
 

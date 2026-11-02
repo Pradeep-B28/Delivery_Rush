@@ -17,6 +17,16 @@ export function parseRoute(hashString = "", searchString = "") {
     }
   }
 
+  if (hash.includes("?")) {
+    const hashQStr = hash.split("?")[1];
+    const pairs = hashQStr.split("&");
+    for (const pair of pairs) {
+      if (!pair) continue;
+      const [k, v] = pair.split("=");
+      query[decodeURIComponent(k)] = v !== undefined ? decodeURIComponent(v) : "";
+    }
+  }
+
   const cleanHash = hash.replace(/^#\/?/, "").split("?")[0];
   const parts = cleanHash ? cleanHash.split("/").filter(Boolean) : [];
 

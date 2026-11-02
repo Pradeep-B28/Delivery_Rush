@@ -7,9 +7,20 @@
   <meta name="description" content="Run a city's food deliveries, then watch an algorithm run the same shift, side by side.">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F172A">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Delivery Rush — Wrench Wise">
+  <meta property="og:description" content="Run a city's food deliveries, then watch an algorithm run the same shift, side by side.">
+  <meta property="og:image" content="https://wrench-wise.com/delivery-rush/og-image.png">
+  <meta property="og:url" content="https://wrench-wise.com/delivery-rush/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Delivery Rush — Wrench Wise">
+  <meta name="twitter:description" content="Run a city's food deliveries, then watch an algorithm run the same shift, side by side.">
+  <meta name="twitter:image" content="https://wrench-wise.com/delivery-rush/og-image.png">
   <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles/tokens.css">
   <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/home.css">
   <link rel="stylesheet" href="styles/map.css">
   <link rel="stylesheet" href="styles/play.css">
   <link rel="stylesheet" href="styles/result.css">
@@ -56,19 +67,9 @@
     </div>
   </header>
 
-  <main id="app">
-    <section class="shell-hero">
-      <div class="shell-badge">A Wrench Wise game</div>
-      <h1 class="shell-title">Can you deliver faster than an algorithm?</h1>
-      <p class="shell-subtitle">Food orders keep coming. You assign the riders. Then an algorithm runs the exact same shift, side by side.</p>
-      <div class="card shell-status-card">
-        <h3>Phase 0: Shell Ready</h3>
-        <p>The foundation is set. Core tokens, layout rules, and verification checks are active.</p>
-      </div>
-    </section>
-  </main>
+  <main id="app"></main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" id="siteFooter" hidden>
     <p class="footer-line">Built by <a href="https://wrench-wise.com/?utm_source=delivery-rush&amp;utm_medium=web-project&amp;utm_campaign=delivery-rush&amp;utm_content=footer" target="_blank" rel="noopener">Wrench Wise</a> to show what DSA does in real life.</p>
     <p class="footer-legal">&copy; 2026 Wrench Wise Edutech Private Limited</p>
   </footer>

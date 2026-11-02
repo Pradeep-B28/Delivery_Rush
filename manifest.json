@@ -1,0 +1,21 @@
+{
+  "name": "Delivery Rush — Wrench Wise",
+  "short_name": "Delivery Rush",
+  "description": "Run a city's food deliveries, then watch an algorithm run the same shift, side by side.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
