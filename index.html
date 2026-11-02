@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Rush</title>
+  <meta name="description" content="Run a city's food deliveries, then watch an algorithm run the same shift, side by side.">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F172A">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <script>
+    // Safe early theme restore to prevent flash
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var qTheme = params.get('theme');
+      var savedTheme = localStorage.getItem('dr-theme');
+      var activeTheme = (qTheme === 'dark' || qTheme === 'light') ? qTheme : ((savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : null);
+      if (activeTheme) {
+        document.documentElement.setAttribute('data-theme', activeTheme);
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="brand-strip" role="presentation"></div>
+  <header class="site-header">
+    <a href="#/" class="site-logo" aria-label="Wrench Wise Delivery Rush">
+      <img src="assets/logo.png" alt="Wrench Wise" height="34">
+    </a>
+    <div class="site-header-actions">
+      <button type="button" id="theme-btn" class="theme-toggle-btn" aria-label="Switch to dark theme">
+        <span class="theme-icon" aria-hidden="true">
+          <svg id="theme-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path id="theme-moon-path" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            <g id="theme-sun-group" hidden>
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </g>
+          </svg>
+        </span>
+        <span class="theme-label" id="theme-btn-text">Switch to dark theme</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="shell-hero">
+      <div class="shell-badge">A Wrench Wise game</div>
+      <h1 class="shell-title">Can you deliver faster than an algorithm?</h1>
+      <p class="shell-subtitle">Food orders keep coming. You assign the riders. Then an algorithm runs the exact same shift, side by side.</p>
+      <div class="card shell-status-card">
+        <h3>Phase 0: Shell Ready</h3>
+        <p>The foundation is set. Core tokens, layout rules, and verification checks are active.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-line">Built by <a href="https://wrench-wise.com/?utm_source=delivery-rush&amp;utm_medium=web-project&amp;utm_campaign=delivery-rush&amp;utm_content=footer" target="_blank" rel="noopener">Wrench Wise</a> to show what DSA does in real life.</p>
+    <p class="footer-disclaimer">Namma Nagar and its shops, riders and customers are made up for learning.</p>
+    <p class="footer-legal">&copy; 2026 Wrench Wise Edutech Private Limited</p>
+  </footer>
+
+  <script>
+    (function () {
+      var themeBtn = document.getElementById('theme-btn');
+      var themeBtnText = document.getElementById('theme-btn-text');
+
+      function getEffectiveTheme() {
+        var explicit = document.documentElement.getAttribute('data-theme');
+        if (explicit === 'dark' || explicit === 'light') return explicit;
+        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+
+      function updateButton(theme) {
+        if (!themeBtnText || !themeBtn) return;
+        var moonPath = document.getElementById('theme-moon-path');
+        var sunGroup = document.getElementById('theme-sun-group');
+        if (theme === 'dark') {
+          themeBtnText.textContent = 'Switch to light theme';
+          themeBtn.setAttribute('aria-label', 'Switch to light theme');
+          if (moonPath) moonPath.setAttribute('hidden', '');
+          if (sunGroup) sunGroup.removeAttribute('hidden');
+        } else {
+          themeBtnText.textContent = 'Switch to dark theme';
+          themeBtn.setAttribute('aria-label', 'Switch to dark theme');
+          if (moonPath) moonPath.removeAttribute('hidden');
+          if (sunGroup) sunGroup.setAttribute('hidden', '');
+        }
+      }
+
+      function setTheme(next) {
+        document.documentElement.setAttribute('data-theme', next);
+        try {
+          localStorage.setItem('dr-theme', next);
+        } catch (e) {}
+        updateButton(next);
+      }
+
+      if (themeBtn) {
+        updateButton(getEffectiveTheme());
+        themeBtn.addEventListener('click', function () {
+          var current = getEffectiveTheme();
+          var next = current === 'dark' ? 'light' : 'dark';
+          setTheme(next);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

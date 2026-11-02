@@ -1,0 +1,223 @@
+/*
+Delivery Rush: Design Tokens
+Matched to wrench-wise.com and Section 7 of PROJECT_BRIEF.md
+*/
+
+:root {
+  /* Site tokens - Light (default) */
+  --bg: #FFFFFF;
+  --bg-grad: linear-gradient(135deg, #ECFDF5 0%, #FFFFFF 45%, #ECFEFF 100%);
+  --surface: #FFFFFF;
+  --surface-2: #F3F4F6;
+  --border: #E5E7EB;
+  --text: #111827;
+  --text-2: #374151;
+  --muted: #6B7280;
+  --brand: #059669;
+  --brand-strong: #047857;
+  --brand-soft: #D1FAE5;
+  --accent: #0891B2;
+  --warn: #B45309;
+  --you: #0891B2;
+
+  /* Brand gradient */
+  --brand-grad: linear-gradient(90deg, #059669, #0D9488, #06B6D4);
+
+  /* Rider tokens - Light */
+  --rider-1: #059669;
+  --rider-2: #7C3AED;
+  --rider-3: #EA580C;
+  --rider-4: #DB2777;
+
+  /* Map tokens - Day, light (default) */
+  --map-land: #EEF2EA;
+  --map-block: #D8DEE3;
+  --map-block-2: #C7D0D8;
+  --map-road: #FFFFFF;
+  --map-road-edge: #CBD5DB;
+  --map-park: #BBF7D0;
+  --map-tree: #4ADE80;
+  --map-water: #A5F3FC;
+  --map-label: #64748B;
+  --map-window: transparent;
+
+  /* Code tokens (dark in both themes) */
+  --code-bg: #0B1220;
+  --code-gutter: #64748B;
+  --code-text: #E2E8F0;
+  --tok-comment: #64748B;
+  --tok-keyword: #67E8F9;
+  --tok-string: #FDE68A;
+  --tok-number: #FCA5A5;
+  --tok-punct: #94A3B8;
+
+  /* Fonts */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Shapes */
+  --radius-pill: 999px;
+  --radius-card: 16px;
+  --radius-map: 20px;
+  --radius-code: 12px;
+
+  /* Shadows - Light */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px -1px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.10);
+
+  /* Easing and Durations */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+}
+
+/* System Dark Preference (when no explicit data-theme is set) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F172A;
+    --bg-grad: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    --surface: #1E293B;
+    --surface-2: #334155;
+    --border: #334155;
+    --text: #F1F5F9;
+    --text-2: #CBD5E1;
+    --muted: #94A3B8;
+    --brand: #10B981;
+    --brand-strong: #34D399;
+    --brand-soft: rgba(16,185,129,0.15);
+    --accent: #22D3EE;
+    --warn: #FBBF24;
+    --you: #22D3EE;
+
+    --rider-1: #34D399;
+    --rider-2: #A78BFA;
+    --rider-3: #FB923C;
+    --rider-4: #F472B6;
+
+    --map-land: #16202F;
+    --map-block: #24324A;
+    --map-block-2: #2C3B55;
+    --map-road: #33415A;
+    --map-road-edge: #1E293B;
+    --map-park: #14532D;
+    --map-tree: #22C55E;
+    --map-water: #155E75;
+    --map-label: #94A3B8;
+
+    --code-bg: #050A14;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.40), 0 2px 4px -2px rgba(0,0,0,0.40);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.40), 0 4px 6px -4px rgba(0,0,0,0.40);
+  }
+}
+
+/* Explicit Dark Theme */
+[data-theme="dark"] {
+  --bg: #0F172A;
+  --bg-grad: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  --surface: #1E293B;
+  --surface-2: #334155;
+  --border: #334155;
+  --text: #F1F5F9;
+  --text-2: #CBD5E1;
+  --muted: #94A3B8;
+  --brand: #10B981;
+  --brand-strong: #34D399;
+  --brand-soft: rgba(16,185,129,0.15);
+  --accent: #22D3EE;
+  --warn: #FBBF24;
+  --you: #22D3EE;
+
+  --rider-1: #34D399;
+  --rider-2: #A78BFA;
+  --rider-3: #FB923C;
+  --rider-4: #F472B6;
+
+  --map-land: #16202F;
+  --map-block: #24324A;
+  --map-block-2: #2C3B55;
+  --map-road: #33415A;
+  --map-road-edge: #1E293B;
+  --map-park: #14532D;
+  --map-tree: #22C55E;
+  --map-water: #155E75;
+  --map-label: #94A3B8;
+
+  --code-bg: #050A14;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.40), 0 2px 4px -2px rgba(0,0,0,0.40);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.40), 0 4px 6px -4px rgba(0,0,0,0.40);
+}
+
+/* Explicit Light Theme */
+[data-theme="light"] {
+  --bg: #FFFFFF;
+  --bg-grad: linear-gradient(135deg, #ECFDF5 0%, #FFFFFF 45%, #ECFEFF 100%);
+  --surface: #FFFFFF;
+  --surface-2: #F3F4F6;
+  --border: #E5E7EB;
+  --text: #111827;
+  --text-2: #374151;
+  --muted: #6B7280;
+  --brand: #059669;
+  --brand-strong: #047857;
+  --brand-soft: #D1FAE5;
+  --accent: #0891B2;
+  --warn: #B45309;
+  --you: #0891B2;
+
+  --rider-1: #059669;
+  --rider-2: #7C3AED;
+  --rider-3: #EA580C;
+  --rider-4: #DB2777;
+
+  --map-land: #EEF2EA;
+  --map-block: #D8DEE3;
+  --map-block-2: #C7D0D8;
+  --map-road: #FFFFFF;
+  --map-road-edge: #CBD5DB;
+  --map-park: #BBF7D0;
+  --map-tree: #4ADE80;
+  --map-water: #A5F3FC;
+  --map-label: #64748B;
+  --map-window: transparent;
+
+  --code-bg: #0B1220;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px -1px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.10);
+}
+
+/* Map mood tokens */
+[data-mood="evening"] {
+  --map-land: #1B1F3A;
+  --map-block: #2A2F52;
+  --map-block-2: #343A63;
+  --map-road: #454B73;
+  --map-road-edge: #14172E;
+  --map-park: #1E4D3B;
+  --map-tree: #2F9E6F;
+  --map-water: #1E3A66;
+  --map-label: #A5B4FC;
+  --map-window: #FDE68A;
+}
+
+[data-mood="rain"] {
+  --map-land: #27323F;
+  --map-block: #36434F;
+  --map-block-2: #3F4E5B;
+  --map-road: #55636F;
+  --map-road-edge: #1F2933;
+  --map-park: #2C5446;
+  --map-tree: #3F8F6F;
+  --map-water: #3B6E8C;
+  --map-label: #B6C4CF;
+  --map-window: transparent;
+}
