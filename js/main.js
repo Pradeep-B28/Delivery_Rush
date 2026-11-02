@@ -1,11 +1,12 @@
 // Application entry point reading URL modes, initializing routing, and running self-test.
-// Uses js/router.js, js/selftest.js, js/store.js, and js/screens/play.js.
+// Uses js/router.js, js/selftest.js, js/store.js, and js/screens.
 // Bootstrapped by index.html script module.
 
 import { renderSelfTest } from "./selftest.js";
 import { initRouter } from "./router.js";
 import { getTheme, setTheme } from "./store.js";
 import { mount as mountPlay, unmount as unmountPlay } from "./screens/play.js";
+import { mount as mountResult, unmount as unmountResult } from "./screens/result.js";
 
 let activeScreenUnmount = null;
 
@@ -43,6 +44,9 @@ export function init() {
     if (routeInfo.route === "play") {
       mountPlay(appEl, routeInfo.params);
       activeScreenUnmount = unmountPlay;
+    } else if (routeInfo.route === "result") {
+      mountResult(appEl, routeInfo);
+      activeScreenUnmount = unmountResult;
     }
   });
 }
