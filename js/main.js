@@ -7,6 +7,7 @@ import { initRouter } from "./router.js";
 import { getTheme, setTheme } from "./store.js";
 import { mount as mountPlay, unmount as unmountPlay } from "./screens/play.js";
 import { mount as mountResult, unmount as unmountResult } from "./screens/result.js";
+import { mount as mountThink, unmount as unmountThink } from "./screens/think.js";
 
 let activeScreenUnmount = null;
 
@@ -47,6 +48,9 @@ export function init() {
     } else if (routeInfo.route === "result") {
       mountResult(appEl, routeInfo);
       activeScreenUnmount = unmountResult;
+    } else if (routeInfo.route === "think") {
+      mountThink(appEl, routeInfo);
+      activeScreenUnmount = unmountThink;
     }
   });
 }
