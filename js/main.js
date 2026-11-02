@@ -1,10 +1,13 @@
 // Application entry point reading URL modes, initializing routing, and running self-test.
-// Uses js/router.js, js/selftest.js, and js/store.js.
+// Uses js/router.js, js/selftest.js, js/store.js, and js/screens/play.js.
 // Bootstrapped by index.html script module.
 
 import { renderSelfTest } from "./selftest.js";
 import { initRouter } from "./router.js";
 import { getTheme, setTheme } from "./store.js";
+import { mount as mountPlay, unmount as unmountPlay } from "./screens/play.js";
+
+let activeScreenUnmount = null;
 
 function setupTheme() {
   const current = getTheme();
@@ -29,8 +32,18 @@ export function init() {
 
   setupTheme();
 
+  const appEl = document.getElementById("app");
+
   initRouter((routeInfo) => {
-    // Phase 1 router placeholder: routes will be wired in Phase 3, 4, 5, 6
+    if (activeScreenUnmount) {
+      activeScreenUnmount();
+      activeScreenUnmount = null;
+    }
+
+    if (routeInfo.route === "play") {
+      mountPlay(appEl, routeInfo.params);
+      activeScreenUnmount = unmountPlay;
+    }
   });
 }
 

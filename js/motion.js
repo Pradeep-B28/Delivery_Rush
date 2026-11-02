@@ -54,6 +54,11 @@ export function removeFrameCallback(callback) {
   }
 }
 
+export function startLoop(callback) {
+  addFrameCallback(callback);
+  return () => removeFrameCallback(callback);
+}
+
 // Pause animation loop and reset timer when tab visibility changes
 if (typeof document !== "undefined") {
   document.addEventListener("visibilitychange", () => {

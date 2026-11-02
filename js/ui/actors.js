@@ -34,7 +34,8 @@ export function renderActorsSvg(state) {
     orders = [],
     progress = 0,
     riderScale = 1.0,
-    moments = []
+    moments = [],
+    selectedOrder = null
   } = state;
 
   // 1. Routes
@@ -112,10 +113,25 @@ export function renderActorsSvg(state) {
       </g>`;
   }).join("");
 
+  // 5. Selected order shop-to-home guidance
+  let selectedGuideSvg = "";
+  if (selectedOrder) {
+    const sPos = cellCenter(selectedOrder.shopCell || selectedOrder.shop);
+    const hPos = cellCenter(selectedOrder.homeCell || selectedOrder.home);
+    selectedGuideSvg = `
+      <g class="selected-guidance" pointer-events="none">
+        <line x1="${sPos.x}" y1="${sPos.y}" x2="${hPos.x}" y2="${hPos.y}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
+        <circle cx="${sPos.x}" cy="${sPos.y}" r="22" fill="none" stroke="var(--accent)" stroke-width="2.5" opacity="0.9"/>
+        <circle cx="${hPos.x}" cy="${hPos.y}" r="20" fill="none" stroke="var(--accent)" stroke-width="2.5" opacity="0.9"/>
+      </g>`;
+  }
+
   return `
     <g class="actors-overlay">
       <!-- Active Delivery Routes -->
       <g class="actors-routes">${routesSvg}</g>
+      <!-- Selected Order Guidance -->
+      ${selectedGuideSvg}
       <!-- Active Customer Homes -->
       <g class="actors-homes">${homesSvg}</g>
       <!-- Riders -->
