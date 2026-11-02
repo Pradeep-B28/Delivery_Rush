@@ -1,0 +1,172 @@
+/*
+Delivery Rush: Map Styles
+Section 6C: The city, actors, bridges, and weather overlays.
+No backdrop-filter anywhere. will-change: transform only on riders.
+*/
+
+.map-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border-radius: var(--radius-map, 20px);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background-color: var(--map-land);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.city-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.map-rain-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Area labels - hide under 300px width per Section 6C */
+@media (max-width: 320px) {
+  .map-area-label {
+    display: none !important;
+  }
+}
+@container (max-width: 300px) {
+  .map-area-label {
+    display: none !important;
+  }
+}
+
+/* Shops */
+.shop-tile {
+  transition: transform var(--duration-200) var(--ease),
+              box-shadow var(--duration-200) var(--ease),
+              stroke var(--duration-200) var(--ease);
+  cursor: pointer;
+}
+
+.shop-node:hover .shop-tile,
+.shop-node.is-selected .shop-tile {
+  transform: translateY(-4px);
+  stroke: var(--brand);
+}
+
+.shop-node:hover .shop-tooltip,
+.shop-node.is-selected .shop-tooltip {
+  opacity: 1;
+}
+
+.shop-pulse-ring {
+  animation: shopRingPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shopRingPulse {
+  0% {
+    r: 15px;
+    opacity: 0.8;
+  }
+  70% {
+    r: 22px;
+    opacity: 0;
+  }
+  100% {
+    r: 22px;
+    opacity: 0;
+  }
+}
+
+/* Flooded bridge styling & gentle pulse */
+.bridge-flooded {
+  animation: floodPulseOnce 1.2s var(--ease-out) 1;
+}
+
+@keyframes floodPulseOnce {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Riders */
+.rider-actor {
+  will-change: transform;
+  pointer-events: none;
+  transition: transform 100ms linear;
+}
+
+/* Route line transitions */
+.rider-route-line {
+  transition: stroke-dashoffset 300ms var(--ease);
+}
+
+/* Moments */
+.moment-ring {
+  animation: momentRingFade 800ms var(--ease-out) forwards;
+}
+
+.moment-chip {
+  animation: momentChipRise 800ms var(--ease-out) forwards;
+}
+
+@keyframes momentRingFade {
+  0% {
+    r: 8px;
+    opacity: 1;
+    stroke-width: 3px;
+  }
+  100% {
+    r: 28px;
+    opacity: 0;
+    stroke-width: 1px;
+  }
+}
+
+@keyframes momentChipRise {
+  0% {
+    transform: translate(0, -10px) scale(0.7);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(0, -22px) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(0, -26px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, -32px) scale(0.9);
+  }
+}
+
+/* Reduced motion adjustments */
+@media (prefers-reduced-motion: reduce) {
+  .shop-pulse-ring,
+  .bridge-flooded,
+  .moment-ring,
+  .moment-chip {
+    animation: none !important;
+  }
+}

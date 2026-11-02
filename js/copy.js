@@ -132,7 +132,6 @@ export const COPY = {
 
   // Footer
   "footer.line": "Built by Wrench Wise to show what DSA does in real life.",
-  "footer.disclaimer": "Namma Nagar and its shops, riders and customers are made up for learning.",
   "footer.legal": "© 2026 Wrench Wise Edutech Private Limited"
 };
 
