@@ -3,6 +3,7 @@
 // Used by screens/think.js.
 
 import { t } from "../copy.js";
+import { getRiderDisplayName } from "../content.js";
 
 const RIDER_COLORS = [
   "var(--rider-1)",
@@ -23,13 +24,14 @@ export function renderGreedyBars({ decision, shift }) {
     const c = candidates.find((x) => x.rider === rider.id) || { full: true };
     const color = RIDER_COLORS[idx % RIDER_COLORS.length];
     const isChosen = rider.id === decision.rider;
+    const displayName = getRiderDisplayName(rider, idx);
 
     if (c.full) {
       return `
         <div class="greedy-row is-full">
           <div class="greedy-rider-meta">
             <span class="greedy-rider-dot" style="background:${color};"></span>
-            <span class="greedy-rider-name font-bold">${rider.name}</span>
+            <span class="greedy-rider-name font-bold">${displayName}</span>
           </div>
           <div class="greedy-bar-container">
             <span class="greedy-full-badge">${t("play.full")}</span>
@@ -51,7 +53,7 @@ export function renderGreedyBars({ decision, shift }) {
       <div class="greedy-row ${isChosen ? "is-chosen" : ""}">
         <div class="greedy-rider-meta">
           <span class="greedy-rider-dot" style="background:${color};"></span>
-          <span class="greedy-rider-name font-bold">${rider.name}</span>
+          <span class="greedy-rider-name font-bold">${displayName}</span>
           ${isChosen ? `<span class="greedy-chosen-tick" aria-label="Chosen">&#10003;</span>` : ""}
         </div>
         <div class="greedy-bar-container">

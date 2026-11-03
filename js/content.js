@@ -33,6 +33,23 @@ export function getRider(id) {
   return CITY.riders.find((r) => r.id === id) || null;
 }
 
+export function getRiderDisplayName(riderOrId, idx = null) {
+  let index = idx;
+  if (index === null || index === undefined || index < 0) {
+    const id = typeof riderOrId === "object" && riderOrId ? riderOrId.id : riderOrId;
+    if (typeof id === "string" && id.startsWith("r")) {
+      const num = parseInt(id.slice(1), 10);
+      if (!isNaN(num) && num >= 1) index = num - 1;
+    } else {
+      index = CITY.riders.findIndex((r) => r.id === id);
+    }
+  }
+  if (index !== null && index !== undefined && index >= 0) {
+    return `Rider ${String.fromCharCode(65 + index)}`;
+  }
+  return "Rider";
+}
+
 export function getDish(shopId, dishName) {
   const list = CITY.dishes[shopId];
   if (!list) return null;

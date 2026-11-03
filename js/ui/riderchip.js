@@ -4,6 +4,7 @@
 
 import { t } from "../copy.js";
 import { riderFree } from "../engine/sim.js";
+import { getRiderDisplayName } from "../content.js";
 
 const RIDER_KEY_HINTS = ["Q", "W", "E", "R"];
 
@@ -13,17 +14,19 @@ export function createRiderChip(rider, riderIndex, maxJobs, onPick, onInspect) {
   chip.className = "rider-chip";
   chip.setAttribute("data-rider-id", rider.id);
   chip.setAttribute("data-rider-index", riderIndex);
-  chip.setAttribute("aria-label", `Rider ${rider.name}`);
+  const letter = String.fromCharCode(65 + riderIndex);
+  const displayName = getRiderDisplayName(rider, riderIndex);
+  chip.setAttribute("aria-label", displayName);
 
   const keyHint = riderIndex < RIDER_KEY_HINTS.length ? RIDER_KEY_HINTS[riderIndex] : "";
 
   chip.innerHTML = `
     <div class="rider-chip-badge" style="--chip-color: var(--rider-${riderIndex + 1});">
-      <span class="rider-badge-num">${riderIndex + 1}</span>
+      <span class="rider-badge-num">${letter}</span>
     </div>
     <div class="rider-chip-info">
       <div class="rider-name-row">
-        <span class="rider-name">${rider.name}</span>
+        <span class="rider-name">${displayName}</span>
         ${keyHint ? `<span class="rider-key-hint" aria-hidden="true">${keyHint}</span>` : ""}
       </div>
       <div class="rider-status-row">

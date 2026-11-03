@@ -13,11 +13,12 @@ export function createCoach({ sim, statusRow, onComplete }) {
       active: false,
       step: null,
       onOrderSelected() {},
-      onRiderAssigned() {}
+      onRiderAssigned() {},
+      checkFirstOrder() {}
     };
   }
 
-  let step = 1; // 1: tap order, 2: pick rider, 3: rush notice
+  let step = 0; // 0: waiting for first order, 1: tap order, 2: pick rider, 3: rush notice
 
   function highlightElement(el) {
     document.querySelectorAll(".coach-tap-ring").forEach((r) => r.remove());
@@ -33,18 +34,25 @@ export function createCoach({ sim, statusRow, onComplete }) {
     document.querySelectorAll(".coach-tap-ring").forEach((r) => r.remove());
   }
 
-  // Step 1: Initialize
-  statusRow.setMessage(t("coach.one"), "coach");
-  const firstCard = document.querySelector(".order-card");
-  if (firstCard) {
-    highlightElement(firstCard);
+  function checkFirstOrder() {
+    if (step !== 0) return;
+    const firstCard = document.querySelector(".order-card");
+    if (firstCard) {
+      step = 1;
+      statusRow.setMessage(t("coach.one"), "coach");
+      highlightElement(firstCard);
+    }
   }
+
+  // Check immediately in case an order is already waiting
+  checkFirstOrder();
 
   return {
     active: true,
     get step() {
       return step;
     },
+    checkFirstOrder,
     onOrderSelected(orderId) {
       if (step !== 1) return;
       step = 2;

@@ -2,7 +2,7 @@
 // Uses content.js, copy.js, links.js, run.js, and ui/ visualizer components.
 // Used by router.js when URL matches #/think/:id.
 
-import { CITY, SHIFTS, getShift, CONCEPTS, EXPLAIN, LINES } from "../content.js";
+import { CITY, SHIFTS, getShift, CONCEPTS, EXPLAIN, LINES, getRiderDisplayName } from "../content.js";
 import { runAlgorithm } from "../engine/algo.js";
 import { explainDecision } from "../engine/explain.js";
 import { score } from "../engine/score.js";
@@ -99,7 +99,8 @@ export function mount(container, routeInfo = {}) {
     if (runData && runData.actions) {
       const yourAction = runData.actions.find((a) => a.order === decision.order);
       if (yourAction && runData.you && runData.you.times && runData.you.times[decision.order] !== undefined) {
-        const rName = riderMap.get(yourAction.rider)?.name || yourAction.rider;
+        const rIdx = shift.riders.findIndex((r) => r.id === yourAction.rider);
+        const rName = getRiderDisplayName(yourAction.rider, rIdx);
         const youMins = runData.you.times[decision.order];
         const algoMins = (runData.algo && runData.algo.times) ? runData.algo.times[decision.order] : 0;
         yourChoiceHtml = `

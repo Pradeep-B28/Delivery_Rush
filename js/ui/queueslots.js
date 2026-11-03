@@ -2,7 +2,7 @@
 // Uses content.js, icons.js, copy.js, and tokens.css.
 // Used by screens/think.js.
 
-import { CITY } from "../content.js";
+import { CITY, getRiderDisplayName } from "../content.js";
 import { FOOD_ICONS } from "./icons.js";
 import { t } from "../copy.js";
 
@@ -19,6 +19,8 @@ const homeMap = new Map(CITY.homes.map((h) => [h.id, h]));
 export function renderQueueSlots({ decision, shift }) {
   const riderIdx = shift.riders.findIndex((r) => r.id === decision.rider);
   const rider = shift.riders[riderIdx >= 0 ? riderIdx : 0] || { name: "Rider" };
+  const displayName = getRiderDisplayName(decision.rider, riderIdx >= 0 ? riderIdx : 0);
+  const riderLetter = String.fromCharCode(65 + (riderIdx >= 0 ? riderIdx : 0));
   const riderColor = RIDER_COLORS[(riderIdx >= 0 ? riderIdx : 0) % RIDER_COLORS.length];
 
   const maxJobs = shift.maxJobs || 2;
@@ -72,9 +74,9 @@ export function renderQueueSlots({ decision, shift }) {
   return `
     <div class="queue-slots-wrap card">
       <header class="queue-rider-header">
-        <span class="queue-rider-badge font-bold" style="background:${riderColor};">${(riderIdx >= 0 ? riderIdx : 0) + 1}</span>
+        <span class="queue-rider-badge font-bold" style="background:${riderColor};">${riderLetter}</span>
         <div class="queue-rider-info">
-          <span class="queue-rider-name font-bold">${rider.name}</span>
+          <span class="queue-rider-name font-bold">${displayName}</span>
           <span class="queue-rider-sub text-muted">FIFO Queue (${maxJobs} slots)</span>
         </div>
       </header>

@@ -116,19 +116,23 @@ export function mount(container, params = {}) {
   const orderCards = new Map();
 
   function refreshOrdersDom() {
-    const waitingOrAssigned = sim.orders.filter((o) => o.status === "waiting" || o.status === "assigned")
+    const waiting = sim.orders.filter((o) => o.status === "waiting")
       .sort((a, b) => a.at - b.at || (a.id < b.id ? -1 : 1));
 
-    if (waitingOrAssigned.length === 0) {
+    if (waiting.length === 0) {
       if (!ordersList.querySelector(".no-orders-banner")) {
         ordersList.innerHTML = `<div class="no-orders-banner">${t("play.noOrders")}</div>`;
+      }
+      for (const [id, card] of orderCards.entries()) {
+        card.remove();
+        orderCards.delete(id);
       }
       return;
     }
     const banner = ordersList.querySelector(".no-orders-banner");
     if (banner) banner.remove();
 
-    waitingOrAssigned.forEach((order, idx) => {
+    waiting.forEach((order, idx) => {
       let card = orderCards.get(order.id);
       if (!card) {
         card = createOrderCard(order, (id) => handleOrderSelect(id), idx + 1);
@@ -140,7 +144,7 @@ export function mount(container, params = {}) {
 
     for (const [id, card] of orderCards.entries()) {
       const o = sim.byId.get(id);
-      if (!o || (o.status !== "waiting" && o.status !== "assigned")) {
+      if (!o || o.status !== "waiting") {
         card.remove();
         orderCards.delete(id);
       }
@@ -185,6 +189,10 @@ export function mount(container, params = {}) {
     refreshOrdersDom();
     refreshRidersDom();
   }
+
+  // Initial DOM synchronization for minute 0
+  refreshOrdersDom();
+  refreshRidersDom();
 
   let isCountingDown = false;
   let countdownTimer = null;
@@ -240,7 +248,7 @@ export function mount(container, params = {}) {
     else if (e.key === "Escape") { game.deselect(); refreshOrdersDom(); refreshRidersDom(); statusRow.setMessage(t("play.tapOrder")); }
     else if (e.key >= "1" && e.key <= "9") {
       const idx = parseInt(e.key, 10) - 1;
-      const waiting = sim.orders.filter((o) => o.status === "waiting" || o.status === "assigned");
+      const waiting = sim.orders.filter((o) => o.status === "waiting");
       if (idx < waiting.length) handleOrderSelect(waiting[idx].id);
     } else {
       const riderIdx = ["Q", "W", "E", "R"].indexOf(e.key.toUpperCase());
@@ -251,7 +259,7 @@ export function mount(container, params = {}) {
 
   let lastShiftMinute = sim.t;
   stopAnimation = startLoop((dtMs) => {
-    if (isCountingDown || (coach && coach.active && coach.step < 3)) {
+    if (isCountingDown || (coach && coach.active && coach.step >= 1 && coach.step < 3)) {
       // Clock waits for countdown/coach
     } else {
       const events = game.tick(dtMs);
@@ -321,6 +329,9 @@ export function mount(container, params = {}) {
       statDelivered.textContent = `${delCount} of ${shift.orders.length}`;
       refreshOrdersDom();
       refreshRidersDom();
+      if (coach && coach.active && coach.step === 0) {
+        coach.checkFirstOrder();
+      }
     }
   });
 

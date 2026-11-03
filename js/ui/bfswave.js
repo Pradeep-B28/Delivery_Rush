@@ -8,6 +8,7 @@ import { renderCitySvg } from "./city.js";
 import { getScooterSvg, getBarrierSvg, FOOD_ICONS } from "./icons.js";
 import { isReducedMotion } from "../motion.js";
 import { t } from "../copy.js";
+import { getRiderDisplayName } from "../content.js";
 
 const RIDER_COLORS = [
   "var(--rider-1)",
@@ -65,10 +66,11 @@ export function createBfsWave({ container, decision, city, shift }) {
     const chipsHtml = shift.riders.map((r, i) => {
       const isSel = r.id === activeRiderId;
       const cColor = RIDER_COLORS[i % RIDER_COLORS.length];
+      const displayName = getRiderDisplayName(r, i);
       return `
         <button type="button" class="think-rider-chip ${isSel ? "is-active" : ""}" data-rider="${r.id}" style="--chip-color: ${cColor};">
           <span class="chip-dot" style="background:${cColor};"></span>
-          <span>${r.name}</span>
+          <span>${displayName}</span>
         </button>
       `;
     }).join("");

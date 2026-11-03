@@ -17,7 +17,7 @@ Three production scripts designed for short-form social video (Instagram Reels, 
 |---|---|---|---|
 | **00:00 - 00:02** | Close-up split screen of the two city maps with riders darting through roads. | **We gave an algorithm the same lunch rush.** | "We gave an algorithm the exact same lunch rush as a player." |
 | **00:02 - 00:08** | Fast motion replay race. Left side labelled "Sample player", right side labelled "Algorithm". Live averages ticking. | **Same 12 orders. Same 3 riders.** | "Same 12 orders. Same 3 riders. Both start at minute zero." |
-| **00:08 - 00:16** | Scooters navigating city roads. Algorithm smoothly balances deliveries across all three riders. | **Watch rider Arun route through Central Park.** | "Notice how the algorithm never leaves a rider idle. Every route is calculated instantly." |
+| **00:08 - 00:16** | Scooters navigating city roads. Algorithm smoothly balances deliveries across all three riders. | **Watch Rider A route through Central Park.** | "Notice how the algorithm never leaves a rider idle. Every route is calculated instantly." |
 | **00:16 - 00:22** | Both maps finish. Map view slides up into the scoreboard reveal. | **Final Scoreboard Reveal** | "The shift ends. The sample player averaged 25.8 minutes. The algorithm delivered in 18.8 minutes." |
 | **00:22 - 00:26** | Close-up of "Where the time went" gap analysis card. | **Where the time went: 7 minutes saved.** | "Where did the time go? Better prioritization on the earliest orders." |
 | **00:26 - 00:30** | Wrench Wise brand card with link button. | **Play Delivery Rush at wrench-wise.com** | "Can you beat the algorithm? Try it free at Wrench Wise." |

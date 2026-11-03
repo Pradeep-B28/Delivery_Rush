@@ -88,8 +88,8 @@ export function renderActorsSvg(state) {
 
     const dir = cur.x < prev.x ? -1 : 1;
     const hasFood = rider.phase === "toHome" || (rider.jobs && (rider.jobs.length > 0 || (typeof rider.jobs.size === "number" && rider.jobs.size > 0)));
-    const badgeNum = idx + 1;
-    const scooter = getScooterSvg(color, badgeNum, hasFood, dir);
+    const badgeLetter = String.fromCharCode(65 + (idx % 26));
+    const scooter = getScooterSvg(color, badgeLetter, hasFood, dir);
 
     const scaleTransform = riderScale !== 1.0 ? `scale(${riderScale})` : "";
     return `
