@@ -3,7 +3,7 @@
 // Used by almost every file through js/content.js and js/links.js.
 
 export const CONFIG = {
-  version: "1.0.0",
+  version: "1.0.1",
 
   // The live address. Set in Phase 7 (deploy). Used for share links and link previews.
   siteUrl: "",

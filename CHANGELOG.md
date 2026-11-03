@@ -6,6 +6,17 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ---
 
+## [1.0.1] - 2026-11-03
+
+### Fixed
+- Play mode order card rendering: resolved clock timing deadlock at shift start so incoming orders at minute 1 render immediately.
+- Order assignment flow: assigned orders now immediately transition into rider queues, keeping the orders column clean for waiting orders.
+
+### Changed
+- Rider display names: standardized rider chips, map scooter badges, Greedy bars, BFS chips, and FIFO queue visualizers to use Rider A, Rider B, Rider C, and Rider D.
+
+---
+
 ## [1.0.0] - 2026-11-02
 
 ### Added
